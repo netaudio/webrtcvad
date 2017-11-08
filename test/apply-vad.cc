@@ -4,6 +4,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/timeb.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <time.h>
 #include <assert.h>
 
 #include <vector>
@@ -21,6 +26,18 @@
 #endif
 
 int main(int argc, char *argv[]) {
+    {
+        struct  tm      *ptm;
+        struct  timeb   stTimeb;
+        static  char    szTime[128] = "";
+
+        ftime(&stTimeb);
+        ptm = localtime(&stTimeb.time);
+        sprintf(szTime, "%04d-%02d-%02d %02d:%02d:%02d.%03d",ptm->tm_year+1900,
+            ptm->tm_mon + 1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec, stTimeb.millitm);
+        printf("%s\n", szTime);
+    }
+#if 0
     const char *usage = "Apply energy vad for input wav file\n"
                         "Usage: vad-test wav_in_file\n";
     ParseOptions po(usage);
@@ -106,8 +123,8 @@ int main(int argc, char *argv[]) {
      if (pFvad) {
         fvad_free(pFvad);
     }
-
-    /*//use local vad
+#else
+    //use local vad
     const char *usage = "Apply energy vad for input wav file\n"
                         "Usage: vad-test wav_in_file\n";
     ParseOptions po(usage);
@@ -184,9 +201,19 @@ int main(int argc, char *argv[]) {
     writer.Write(wav_out.c_str());
     free(data);
     free(speech_data);
-    */
+#endif
 
+    {
+        struct  tm      *ptm;
+        struct  timeb   stTimeb;
+        static  char    szTime[128] = "";
 
+        ftime(&stTimeb);
+        ptm = localtime(&stTimeb.time);
+        sprintf(szTime, "%04d-%02d-%02d %02d:%02d:%02d.%03d",ptm->tm_year+1900,
+            ptm->tm_mon + 1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec, stTimeb.millitm);
+        printf("%s\n", szTime);
+    }
     return 0;
 }
 
