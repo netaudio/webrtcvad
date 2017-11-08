@@ -5,26 +5,29 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+#include "webrtc/common_audio/vad/include/webrtc_vad.h"
+#include "webrtc/typedefs.h"
+
 Vad::Vad(int mode): mode_(mode) {
-    if (WebRtcVad_Create(&handle_) < 0) {
+    if (WebRtcVad_Create((VadInst**)&handle_) < 0) {
         printf("Create webrtc vad handle error\n");
         exit(-1);
     }
-    WebRtcVad_Init(handle_);
-    WebRtcVad_set_mode(handle_, mode_);
+    WebRtcVad_Init((VadInst*)handle_);
+    WebRtcVad_set_mode((VadInst*)handle_, mode_);
 }
 
 Vad::~Vad() {
-    WebRtcVad_Free(handle_);
+    WebRtcVad_Free((VadInst*)handle_);
 }
 
 void Vad::SetMode(int mode) {
     mode_ = mode;
-    WebRtcVad_set_mode(handle_, mode_);
+    WebRtcVad_set_mode((VadInst*)handle_, mode_);
 }
 
-bool Vad::IsSpeech(const int16_t *data, int num_samples, int fs) {
-    int ret = WebRtcVad_Process(handle_, fs, data, num_samples);
+bool Vad::IsSpeech(const short *data, int num_samples, int fs) {
+    int ret = WebRtcVad_Process((VadInst*)handle_, fs,(const int16_t *)data, num_samples);
     switch (ret) {
         case 0:
             return false;

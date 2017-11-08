@@ -4,9 +4,6 @@
 #ifndef WEBRTC_VAD_H_
 #define WEBRTC_VAD_H_
 
-#include "webrtc/common_audio/vad/include/webrtc_vad.h"
-#include "webrtc/typedefs.h"
-
 // vad wrapper for webrtc vad
 
 class Vad {
@@ -17,10 +14,10 @@ public:
     Vad(int mode = 0); 
     virtual ~Vad();
     void SetMode(int mode);
-    bool IsSpeech(const int16_t *data, int num_samples, int fs); 
+    bool IsSpeech(const short *data, int num_samples, int fs); 
 private:
     int mode_;
-    VadInst* handle_;
+    void* handle_;
 };
 
 

@@ -3,7 +3,7 @@
 
 CXX = g++
 CC = cc
-CXXFLAGS = -g -I . -D WEBRTC_POSIX
+CXXFLAGS = -g -I . -D WEBRTC_POSIX -I./libvad/include
 
 SRC = $(wildcard webrtc/*/*/*.c)
 OBJ = $(patsubst %.c, build/%.o, $(SRC)) build/vad.o
@@ -30,7 +30,7 @@ build/vad.o: vad.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 test/apply-vad: test/apply-vad.cc lib/vad.a
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ -lpthread -Wl,-rpath=/root/test/webrtcvad/libvad/lib -L./libvad/lib -lfvad
 
 -include build/*.d
 -include build/*/*/*/*.d
